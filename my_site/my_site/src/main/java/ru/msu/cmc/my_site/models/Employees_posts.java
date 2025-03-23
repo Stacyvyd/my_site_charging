@@ -17,7 +17,7 @@ public class Employees_posts implements CommonEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "record_id", nullable = false)
     private Long id;
 
     @Column(name = "employee_id", nullable = false)

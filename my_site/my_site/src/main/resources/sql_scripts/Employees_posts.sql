@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS Employees_posts;
 CREATE TABLE Employees_posts (
-                                 id SERIAL PRIMARY KEY,
+                                 record_id SERIAL PRIMARY KEY,
                                  Employee_id INT NOT NULL,
                                  post_id INT NOT NULL,
                                  start_date DATE NOT NULL,
