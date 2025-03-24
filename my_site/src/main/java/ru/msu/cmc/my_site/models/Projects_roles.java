@@ -1,25 +1,20 @@
 package ru.msu.cmc.my_site.models;
 import lombok.*;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "roles_of_employee")
+@Table(name = "projects_roles")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Roles_of_employee implements CommonEntity<Long> {
-
+public class Projects_roles implements CommonEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @Column(name = "employee_id", nullable = false)
-    @NonNull
-    private Long employeeId;
 
     @Column(name = "projects_id", nullable = false)
     @NonNull
@@ -29,10 +24,11 @@ public class Roles_of_employee implements CommonEntity<Long> {
     @NonNull
     private Long roleId;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "employee_id", nullable = false)
     @NonNull
-    private java.sql.Date startDate;
+    private Long employeeId;
 
-    @Column(name = "end_date")
-    private java.sql.Date endDate;
+    @Column(name = "payment", nullable = false)
+    @NonNull
+    private Integer payment;
 }

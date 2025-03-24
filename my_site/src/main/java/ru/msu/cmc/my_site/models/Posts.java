@@ -1,6 +1,6 @@
 package ru.msu.cmc.my_site.models;
 import lombok.*;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "experience_payment")
