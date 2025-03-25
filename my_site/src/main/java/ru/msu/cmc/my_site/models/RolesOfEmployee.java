@@ -3,18 +3,23 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "projects_roles")
+@Table(name = "roles_of_employee")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Projects_roles implements CommonEntity<Long> {
+public class RolesOfEmployee implements CommonEntity<Long> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "employee_id", nullable = false)
+    @NonNull
+    private Long employeeId;
 
     @Column(name = "projects_id", nullable = false)
     @NonNull
@@ -24,11 +29,10 @@ public class Projects_roles implements CommonEntity<Long> {
     @NonNull
     private Long roleId;
 
-    @Column(name = "employee_id", nullable = false)
+    @Column(name = "start_date", nullable = false)
     @NonNull
-    private Long employeeId;
+    private java.sql.Date startDate;
 
-    @Column(name = "payment", nullable = false)
-    @NonNull
-    private Integer payment;
+    @Column(name = "end_date")
+    private java.sql.Date endDate;
 }

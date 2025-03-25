@@ -13,7 +13,7 @@ import java.sql.Date;
 @RequiredArgsConstructor
 @AllArgsConstructor
 
-public class Payment_history implements CommonEntity<Long> {
+public class PaymentHistory implements CommonEntity<Long> {
     public enum MyType {
         зарплата,
         премия

@@ -1,7 +1,7 @@
 package ru.msu.cmc.my_site.models;
 import lombok.*;
-import jakarta.persistence.*;
 
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -13,7 +13,7 @@ import java.sql.Date;
 @RequiredArgsConstructor
 @AllArgsConstructor
 
-public class Employees_posts implements CommonEntity<Long> {
+public class EmployeesPosts implements CommonEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

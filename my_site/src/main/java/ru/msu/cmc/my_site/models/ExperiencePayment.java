@@ -11,7 +11,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 
-public class Experience_payment implements CommonEntity<Integer> {
+public class ExperiencePayment implements CommonEntity<Integer> {
 
     @Id
     @Column(name = "experience", nullable = false)

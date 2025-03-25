@@ -1,6 +1,5 @@
 package ru.msu.cmc.my_site.DAO.impl;
 
-import jakarta.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import ru.msu.cmc.my_site.DAO.CommonDAO;
 import ru.msu.cmc.my_site.models.CommonEntity;
 
+import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.Collection;
 

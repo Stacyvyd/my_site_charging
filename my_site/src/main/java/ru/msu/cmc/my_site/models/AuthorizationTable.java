@@ -11,7 +11,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 
-public class Authorization_table implements CommonEntity<Long> {
+public class AuthorizationTable implements CommonEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
