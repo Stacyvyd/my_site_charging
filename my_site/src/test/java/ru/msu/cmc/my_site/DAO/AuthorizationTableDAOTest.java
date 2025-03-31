@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.hibernate.SessionFactory;
 import org.springframework.test.context.TestPropertySource;
-import ru.msu.cmc.my_site.DAO.impl.AuthorizationTableDAOImpl;
 import ru.msu.cmc.my_site.models.AuthorizationTable;
 
 import static org.junit.jupiter.api.Assertions.*;
