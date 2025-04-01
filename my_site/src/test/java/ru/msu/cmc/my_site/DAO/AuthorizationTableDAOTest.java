@@ -10,6 +10,7 @@ import ru.msu.cmc.my_site.models.AuthorizationTable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest(properties = "spring.main.lazy-initialization=true")
@@ -70,5 +71,49 @@ public class AuthorizationTableDAOTest {
     public void testGetAll() {
         List<AuthorizationTable> all = (List<AuthorizationTable>) authorizationTableDAO.getAll();
         assertTrue(all.size() > 0);
+    }
+
+    @Test
+    public void testSaveCollection () {
+        annihilation();
+        assertTrue(authorizationTableDAO.getAll().size() == 0);
+        List<AuthorizationTable> all = new ArrayList<AuthorizationTable>();
+        AuthorizationTable testEntry1 = new AuthorizationTable("test_user1", "test_pass1");
+        AuthorizationTable testEntry2 = new AuthorizationTable("test_user2", "test_pass2");
+        AuthorizationTable testEntry3 = new AuthorizationTable("test_user3", "test_pass3");
+        AuthorizationTable testEntry4 = new AuthorizationTable("test_user4", "test_pass4");
+        AuthorizationTable testEntry5 = new AuthorizationTable("test_user5", "test_pass5");
+        all.add(testEntry1);
+        all.add(testEntry2);
+        all.add(testEntry3);
+        all.add(testEntry4);
+        all.add(testEntry5);
+        authorizationTableDAO.saveCollection(all);
+        assertTrue(authorizationTableDAO.getAll().size() == 5);
+    }
+
+    @Test
+    public void testUpdate() {
+        AuthorizationTable entity = authorizationTableDAO.getById(1L);
+        String login = entity.getLogin();
+        entity.setLogin("new_login");
+        authorizationTableDAO.update(entity);
+        assertNotSame(login, entity.getLogin());
+    }
+
+    @Test
+    public void testDelete() {
+        AuthorizationTable entity = authorizationTableDAO.getById(1L);
+        assertNotNull(entity);
+        authorizationTableDAO.delete(entity);
+        assertNull(authorizationTableDAO.getById(1L));
+    }
+
+    @Test
+    public void testDeleteById() {
+        AuthorizationTable entity = authorizationTableDAO.getById(1L);
+        assertNotNull(entity);
+        authorizationTableDAO.deleteById(1L);
+        assertNull(authorizationTableDAO.getById(1L));
     }
 }
