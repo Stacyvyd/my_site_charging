@@ -3,7 +3,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "experience_payment")
+@Table(name = "posts")
 @Getter
 @Setter
 @ToString

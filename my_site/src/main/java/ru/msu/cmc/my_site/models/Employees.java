@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "experience_payment")
+@Table(name = "employees")
 @Getter
 @Setter
 @ToString
