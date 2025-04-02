@@ -45,7 +45,7 @@ CREATE TABLE payment_history (
                                  Employee_id INT NOT NULL,
                                  payment INT NOT NULL,
                                  payment_type VARCHAR(50) NOT NULL CHECK (payment_type IN ('зарплата', 'премия')),
-                                 payment_date DATE,
+                                 payment_date DATE NOT NULL,
                                  FOREIGN KEY (Employee_id) REFERENCES Employees(Employee_id)
 );
 
