@@ -70,13 +70,13 @@ public class AuthorizationTableDAOTest {
     @Test
     public void testGetAll() {
         List<AuthorizationTable> all = (List<AuthorizationTable>) authorizationTableDAO.getAll();
-        assertTrue(all.size() > 0);
+        assertFalse(all.isEmpty());
     }
 
     @Test
     public void testSaveCollection () {
         annihilation();
-        assertTrue(authorizationTableDAO.getAll().size() == 0);
+        assertEquals(0, authorizationTableDAO.getAll().size());
         List<AuthorizationTable> all = new ArrayList<AuthorizationTable>();
         AuthorizationTable testEntry1 = new AuthorizationTable("test_user1", "test_pass1");
         AuthorizationTable testEntry2 = new AuthorizationTable("test_user2", "test_pass2");
@@ -89,7 +89,7 @@ public class AuthorizationTableDAOTest {
         all.add(testEntry4);
         all.add(testEntry5);
         authorizationTableDAO.saveCollection(all);
-        assertTrue(authorizationTableDAO.getAll().size() == 5);
+        assertEquals(5, authorizationTableDAO.getAll().size());
     }
 
     @Test
