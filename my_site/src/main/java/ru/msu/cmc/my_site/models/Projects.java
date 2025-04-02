@@ -2,7 +2,7 @@ package ru.msu.cmc.my_site.models;
 import lombok.*;
 import javax.persistence.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "projects")
@@ -10,15 +10,8 @@ import java.sql.Date;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Projects implements CommonEntity<Long> {
-    public enum ProjectType {
-        закончен,
-        не_начался,
-        в_процессе,
-        закрыт
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "projects_id", nullable = false)
@@ -30,12 +23,29 @@ public class Projects implements CommonEntity<Long> {
 
     @Column(name = "start_date", nullable = false)
     @NonNull
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name = "status", nullable = false)
     @NonNull
-    private ProjectType status;
+    private String status;
+
+    public Projects(String projectName, LocalDate startDate, String status) {
+        this.projectName = projectName;
+        this.startDate = startDate;
+        if (status.equalsIgnoreCase("закончен") || status.equals("не начался") || status.equals("в процессе") || status.equals("закрыт")) {
+            this.status = status;
+        }
+    }
+
+    public Projects(String projectName, LocalDate startDate, LocalDate endDate,String status) {
+        this.projectName = projectName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        if (status.equalsIgnoreCase("закончен") || status.equals("не начался") || status.equals("в процессе") || status.equals("закрыт")) {
+            this.status = status;
+        }
+    }
 }

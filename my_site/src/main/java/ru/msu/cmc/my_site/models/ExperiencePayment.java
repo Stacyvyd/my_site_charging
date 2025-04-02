@@ -15,19 +15,9 @@ public class ExperiencePayment implements CommonEntity<Integer> {
 
     @Id
     @Column(name = "experience", nullable = false)
-    private Integer experience;
+    private Integer id;
 
     @Column(name = "payment", nullable = false)
     @NonNull
     private Integer payment;
-
-    @Override
-    public Integer getId() {
-        return this.experience;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.experience = id;
-    }
 }

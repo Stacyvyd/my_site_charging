@@ -16,17 +16,23 @@ public class ProjectsRoles implements CommonEntity<Long> {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "projects_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "projects_id")
+    @ToString.Exclude
     @NonNull
-    private Long projectId;
+    private Projects projectId;
 
-    @Column(name = "role_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "role_id")
+    @ToString.Exclude
     @NonNull
-    private Long roleId;
+    private Roles roleId;
 
-    @Column(name = "employee_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "employee_id")
+    @ToString.Exclude
     @NonNull
-    private Long employeeId;
+    private Employees employeeId;
 
     @Column(name = "payment", nullable = false)
     @NonNull

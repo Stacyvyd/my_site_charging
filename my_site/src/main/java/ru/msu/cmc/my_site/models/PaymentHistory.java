@@ -2,7 +2,7 @@ package ru.msu.cmc.my_site.models;
 import lombok.*;
 import javax.persistence.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "payment_history")
@@ -10,22 +10,19 @@ import java.sql.Date;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 
 public class PaymentHistory implements CommonEntity<Long> {
-    public enum MyType {
-        зарплата,
-        премия
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id", nullable = false)
     private Long id;
 
-    @Column(name = "employee_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "employee_id")
+    @ToString.Exclude
     @NonNull
-    private Long employeeId;
+    private Employees employeeId;
 
     @Column(name = "payment", nullable = false)
     @NonNull
@@ -34,8 +31,23 @@ public class PaymentHistory implements CommonEntity<Long> {
 
     @Column(name = "payment_type", nullable = false)
     @NonNull
-    private MyType paymentType;
+    private String paymentType;
 
-    @Column(name = "payment_date")
-    private Date paymentDate;
+    @Column(name = "payment_date", nullable = false)
+    @NonNull
+    private LocalDate paymentDate;
+
+    public PaymentHistory(Employees employeeId, Integer payment, String paymentType, LocalDate paymentDate) {
+        this.employeeId = employeeId;
+        this.payment = payment;
+        if (paymentType.equals("зарплата") || paymentType.equals("премия")) {
+            this.paymentType = paymentType;
+        } else {
+            throw new IllegalArgumentException(
+                    "Некорректный тип выплаты: " + paymentType +
+                            ". Допустимые значения: 'зарплата', 'премия'."
+            );
+        }
+        this.paymentDate = paymentDate;
+    }
 }

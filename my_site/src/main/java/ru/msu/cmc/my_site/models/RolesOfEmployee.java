@@ -1,6 +1,7 @@
 package ru.msu.cmc.my_site.models;
 import lombok.*;
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "roles_of_employee")
@@ -17,22 +18,28 @@ public class RolesOfEmployee implements CommonEntity<Long> {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "employee_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employee_id", nullable = false)
+    @ToString.Exclude
     @NonNull
-    private Long employeeId;
+    private Employees employeeId;
 
-    @Column(name = "projects_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "projects_id", nullable = false)
+    @ToString.Exclude
     @NonNull
-    private Long projectId;
+    private Projects projectId;
 
-    @Column(name = "role_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
+    @ToString.Exclude
     @NonNull
-    private Long roleId;
+    private Roles roleId;
 
     @Column(name = "start_date", nullable = false)
     @NonNull
-    private java.sql.Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    private java.sql.Date endDate;
+    private LocalDate endDate;
 }

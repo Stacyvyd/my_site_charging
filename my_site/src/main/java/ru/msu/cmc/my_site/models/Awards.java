@@ -27,4 +27,10 @@ public class Awards implements CommonEntity<Long> {
 
     @Column(name = "description")
     private String description;
+
+    public Awards(String awardName, Integer payment, String description) {
+        this.awardName = awardName;
+        this.payment = payment;
+        this.description = description;
+    }
 }

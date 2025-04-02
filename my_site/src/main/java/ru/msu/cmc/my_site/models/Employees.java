@@ -2,7 +2,7 @@ package ru.msu.cmc.my_site.models;
 import lombok.*;
 import javax.persistence.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "employees")
@@ -27,15 +27,17 @@ public class Employees implements CommonEntity<Long> {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "post_id")
-    private Long postId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    @ToString.Exclude
+    private Posts postId;
 
     @Column(name = "experience")
     private Integer experience;
 
     @Column(name = "birth_date", nullable = false)
     @NonNull
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "education")
     private String education;

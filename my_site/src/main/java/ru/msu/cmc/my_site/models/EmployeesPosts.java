@@ -2,7 +2,7 @@ package ru.msu.cmc.my_site.models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "employees_posts")
@@ -20,18 +20,29 @@ public class EmployeesPosts implements CommonEntity<Long> {
     @Column(name = "record_id", nullable = false)
     private Long id;
 
-    @Column(name = "employee_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "employee_id")
+    @ToString.Exclude
     @NonNull
-    private Long employeeId;
+    private Employees employeeId;
 
-    @Column(name = "post_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "post_id")
+    @ToString.Exclude
     @NonNull
-    private Long postId;
+    private Posts postId;
 
     @Column(name = "start_date", nullable = false)
     @NonNull
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
+
+    public EmployeesPosts(Employees employeeId, Posts postId, LocalDate startDate, LocalDate endDate) {
+        this.employeeId = employeeId;
+        this.postId = postId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }
