@@ -4,7 +4,10 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import ru.msu.cmc.my_site.DAO.ProjectsRolesDAO;
+import ru.msu.cmc.my_site.models.Employees;
+import ru.msu.cmc.my_site.models.Projects;
 import ru.msu.cmc.my_site.models.ProjectsRoles;
+import ru.msu.cmc.my_site.models.Roles;
 
 import java.util.List;
 
@@ -16,19 +19,33 @@ public class ProjectsRolesDAOImpl extends CommonDAOImpl<ProjectsRoles, Long> imp
     }
 
     @Override
-    public List<ProjectsRoles> filterProjectsRoles(Long projectId, Long roleId, Long employeeId) {
+    public List<ProjectsRoles> filterProjectsRoles(Projects project, Roles role, Employees employee) {
         try (Session session = sessionFactory.openSession()) {
-            StringBuilder hql = new StringBuilder("FROM Projects_roles WHERE 1=1");
+            StringBuilder hql = new StringBuilder("FROM ProjectsRoles WHERE 1=1");
 
-            if (projectId != null) hql.append(" AND projects_id = :projectId");
-            if (roleId != null) hql.append(" AND role_id = :roleId");
-            if (employeeId != null) hql.append(" AND employee_id = :employeeId");
+            // Добавляем условия фильтрации
+            if (project != null) {
+                hql.append(" AND projectId = :project");
+            }
+            if (role != null) {
+                hql.append(" AND roleId = :role");
+            }
+            if (employee != null) {
+                hql.append(" AND employeeId = :employee");
+            }
 
             Query<ProjectsRoles> query = session.createQuery(hql.toString(), ProjectsRoles.class);
 
-            if (projectId != null) query.setParameter("projectId", projectId);
-            if (roleId != null) query.setParameter("roleId", roleId);
-            if (employeeId != null) query.setParameter("employeeId", employeeId);
+            // Устанавливаем параметры
+            if (project != null) {
+                query.setParameter("project", project);
+            }
+            if (role != null) {
+                query.setParameter("role", role);
+            }
+            if (employee != null) {
+                query.setParameter("employee", employee);
+            }
 
             return query.list();
         }

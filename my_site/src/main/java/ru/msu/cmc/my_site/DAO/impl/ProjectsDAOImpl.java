@@ -2,11 +2,13 @@ package ru.msu.cmc.my_site.DAO.impl;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 import ru.msu.cmc.my_site.DAO.ProjectsDAO;
 import ru.msu.cmc.my_site.models.Projects;
 
 import java.util.List;
 
+@Repository
 public class ProjectsDAOImpl extends CommonDAOImpl<Projects, Long>
         implements ProjectsDAO {
     public ProjectsDAOImpl() {

@@ -1,6 +1,5 @@
 package ru.msu.cmc.my_site.DAO;
 
-import ru.msu.cmc.my_site.models.Employees;
 import ru.msu.cmc.my_site.models.Projects;
 
 import java.util.List;

@@ -2,11 +2,13 @@ package ru.msu.cmc.my_site.DAO.impl;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 import ru.msu.cmc.my_site.DAO.RolesDAO;
 import ru.msu.cmc.my_site.models.Roles;
 
 import java.util.List;
 
+@Repository
 public class RolesDAOImpl extends CommonDAOImpl<Roles, Long> implements RolesDAO {
     public RolesDAOImpl() {
         super(Roles.class);

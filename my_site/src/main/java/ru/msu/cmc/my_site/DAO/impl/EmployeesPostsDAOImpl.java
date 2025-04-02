@@ -4,7 +4,9 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import ru.msu.cmc.my_site.DAO.EmployeesPostsDAO;
+import ru.msu.cmc.my_site.models.Employees;
 import ru.msu.cmc.my_site.models.EmployeesPosts;
+import ru.msu.cmc.my_site.models.Posts;
 
 import java.util.List;
 
@@ -18,17 +20,27 @@ public class EmployeesPostsDAOImpl
     }
 
     @Override
-    public List<EmployeesPosts> filterPosts(Long employeeId, Long postId) {
+    public List<EmployeesPosts> filterPosts(Employees employee, Posts post) {
         try (Session session = sessionFactory.openSession()) {
-            StringBuilder hql = new StringBuilder("FROM Employees_posts WHERE 1=1");
+            StringBuilder hql = new StringBuilder("FROM EmployeesPosts WHERE 1=1");
 
-            if (employeeId != null) hql.append(" AND employee_id = :employeeId");
-            if (postId != null) hql.append(" AND post_id = :postId");
+            if (employee != null) {
+                hql.append(" AND employeeId = :employee");
+            }
+
+            if (post != null) {
+                hql.append(" AND postId = :post");
+            }
 
             Query<EmployeesPosts> query = session.createQuery(hql.toString(), EmployeesPosts.class);
 
-            if (employeeId != null) query.setParameter("employeeId", employeeId);
-            if (postId != null) query.setParameter("postId", postId);
+            if (employee != null) {
+                query.setParameter("employee", employee);
+            }
+
+            if (post != null) {
+                query.setParameter("post", post);
+            }
 
             return query.list();
         }

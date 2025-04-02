@@ -5,6 +5,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import ru.msu.cmc.my_site.DAO.EmployeesDAO;
 import ru.msu.cmc.my_site.models.Employees;
+import ru.msu.cmc.my_site.models.Posts;
 
 import java.util.List;
 
@@ -18,16 +19,16 @@ public class EmployeesDAOImpl
     }
 
     @Override
-    public List<Employees> filterEmployees(String namePart, Long postId, Integer experience) {
+    public List<Employees> filterEmployees(String namePart, Posts post, Integer experience) {
         try (Session session = sessionFactory.openSession()) {
             StringBuilder hql = new StringBuilder("FROM Employees WHERE 1=1");
 
-            if (namePart != null && !namePart.isEmpty()) {
-                hql.append(" AND lower(name) LIKE lower(:namePart)");
+            if (namePart != null && !namePart.trim().isEmpty()) {
+                hql.append(" AND LOWER(name) LIKE LOWER(:namePart)");
             }
 
-            if (postId != null) {
-                hql.append(" AND post_id = :postId");
+            if (post != null) {
+                hql.append(" AND postId = :post");
             }
 
             if (experience != null) {
@@ -36,12 +37,12 @@ public class EmployeesDAOImpl
 
             Query<Employees> query = session.createQuery(hql.toString(), Employees.class);
 
-            if (namePart != null && !namePart.isEmpty()) {
-                query.setParameter("namePart", "%" + namePart + "%");
+            if (namePart != null && !namePart.trim().isEmpty()) {
+                query.setParameter("namePart", "%" + namePart.trim() + "%");
             }
 
-            if (postId != null) {
-                query.setParameter("postId", postId);
+            if (post != null) {
+                query.setParameter("post", post);
             }
 
             if (experience != null) {

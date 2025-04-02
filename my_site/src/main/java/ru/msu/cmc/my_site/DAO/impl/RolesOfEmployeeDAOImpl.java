@@ -3,6 +3,9 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import ru.msu.cmc.my_site.DAO.RolesOfEmployeeDAO;
+import ru.msu.cmc.my_site.models.Employees;
+import ru.msu.cmc.my_site.models.Projects;
+import ru.msu.cmc.my_site.models.Roles;
 import ru.msu.cmc.my_site.models.RolesOfEmployee;
 
 import java.util.List;
@@ -15,19 +18,31 @@ public class RolesOfEmployeeDAOImpl extends CommonDAOImpl<RolesOfEmployee, Long>
     }
 
     @Override
-    public List<RolesOfEmployee> filterRolesHistory(Long employeeId, Long projectId, Long roleId) {
+    public List<RolesOfEmployee> filterRolesHistory(Employees employee, Projects project, Roles role) {
         try (Session session = sessionFactory.openSession()) {
-            StringBuilder hql = new StringBuilder("FROM Roles_of_employee WHERE 1=1");
+            StringBuilder hql = new StringBuilder("FROM RolesOfEmployee WHERE 1=1");
 
-            if (employeeId != null) hql.append(" AND employee_id = :employeeId");
-            if (projectId != null) hql.append(" AND projects_id = :projectId");
-            if (roleId != null) hql.append(" AND role_id = :roleId");
+            if (employee != null) {
+                hql.append(" AND employeeId = :employee");
+            }
+            if (project != null) {
+                hql.append(" AND projectId = :project");
+            }
+            if (role != null) {
+                hql.append(" AND roleId = :role");
+            }
 
             Query<RolesOfEmployee> query = session.createQuery(hql.toString(), RolesOfEmployee.class);
 
-            if (employeeId != null) query.setParameter("employeeId", employeeId);
-            if (projectId != null) query.setParameter("projectId", projectId);
-            if (roleId != null) query.setParameter("roleId", roleId);
+            if (employee != null) {
+                query.setParameter("employee", employee);
+            }
+            if (project != null) {
+                query.setParameter("project", project);
+            }
+            if (role != null) {
+                query.setParameter("role", role);
+            }
 
             return query.list();
         }

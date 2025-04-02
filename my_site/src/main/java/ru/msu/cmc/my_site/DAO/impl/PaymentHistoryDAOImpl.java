@@ -2,12 +2,15 @@ package ru.msu.cmc.my_site.DAO.impl;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 import ru.msu.cmc.my_site.DAO.PaymentHistoryDAO;
+import ru.msu.cmc.my_site.models.Employees;
 import ru.msu.cmc.my_site.models.PaymentHistory;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public class PaymentHistoryDAOImpl extends CommonDAOImpl<PaymentHistory, Long>
         implements PaymentHistoryDAO {
 
@@ -17,27 +20,32 @@ public class PaymentHistoryDAOImpl extends CommonDAOImpl<PaymentHistory, Long>
 
     @Override
     public List<PaymentHistory> filterPayments(
-            Long employeeId,
-            Date startDate,
-            Date endDate,
+            Employees employeeId,
+            LocalDate startDate,
+            LocalDate endDate,
             String paymentType
     ) {
         try (Session session = sessionFactory.openSession()) {
-            StringBuilder hql = new StringBuilder("FROM Payment_history WHERE employee_id = :id");
+            StringBuilder hql = new StringBuilder("FROM PaymentHistory WHERE 1 = 1");
 
+            if (employeeId != null) {
+                hql.append(" AND employeeId = :employee");
+            }
             if (startDate != null) {
-                hql.append(" AND payment_date >= :startDate");
+                hql.append(" AND paymentDate >= :startDate");
             }
             if (endDate != null) {
-                hql.append(" AND payment_date <= :endDate");
+                hql.append(" AND paymentDate <= :endDate");
             }
             if (paymentType != null) {
-                hql.append(" AND payment_type = :type");
+                hql.append(" AND paymentType = :paymentType");
             }
 
             Query<PaymentHistory> query = session.createQuery(hql.toString(), PaymentHistory.class);
-            query.setParameter("id", employeeId);
 
+            if (employeeId != null) {
+                query.setParameter("employee", employeeId);
+            }
             if (startDate != null) {
                 query.setParameter("startDate", startDate);
             }
@@ -45,7 +53,7 @@ public class PaymentHistoryDAOImpl extends CommonDAOImpl<PaymentHistory, Long>
                 query.setParameter("endDate", endDate);
             }
             if (paymentType != null) {
-                query.setParameter("type", paymentType);
+                query.setParameter("paymentType", paymentType);
             }
 
             return query.list();
