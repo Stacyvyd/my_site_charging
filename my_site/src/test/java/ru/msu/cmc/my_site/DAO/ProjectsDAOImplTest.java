@@ -51,10 +51,13 @@ public class ProjectsDAOImplTest {
         List<Projects> result2 = projectsDAO.filterProjects("Проект", null);
         assertEquals(2, result2.size());
 
-        List<Projects> result3 = projectsDAO.filterProjects("Проект Альфа", null);
-        assertEquals(1, result3.size());
+        List<Projects> result3 = projectsDAO.filterProjects("", null);
+        assertEquals(2, result3.size());
 
         List<Projects> result4 = projectsDAO.filterProjects(null, "закончен");
         assertEquals(1, result4.size());
+
+        List<Projects> result5 = projectsDAO.filterProjects(null, "");
+        assertEquals(2, result5.size());
     }
 }

@@ -52,7 +52,7 @@ public class RolesDAOImplTest {
         List<Roles> result2 = rolesDAO.filterRoles("Разработчик");
         assertEquals(1, result2.size());
 
-        List<Roles> result3 = rolesDAO.filterRoles("Р");
-        assertEquals(2, result3.size());
+        List<Roles> result3 = rolesDAO.filterRoles("");
+        assertEquals(3, result3.size());
     }
 }
