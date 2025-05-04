@@ -12,7 +12,6 @@ import ru.msu.cmc.my_site.models.Posts;
 import java.util.List;
 
 import java.security.Principal;
-import java.time.LocalDate;
 
 @Controller
 public class PagesController {
@@ -84,7 +83,49 @@ public class PagesController {
         return "employees";
     }
 
+    @GetMapping("/employee/{id}")
+    public String getEmployeePage(@PathVariable Long id, Model model) {
+        Employees employee = employeesDAO.getById(id);
+        if (employee == null) {
+            throw new RuntimeException("Сотрудник с ID " + id + " не найден");
+        }
+        model.addAttribute("employee", employee);
+        return "employeePage"; // это будет имя HTML-файла
+    }
 
+
+    @GetMapping("/employee/edit")
+    public String createEmployeeForm(Model model) {
+        model.addAttribute("employee", new Employees()); // Пустой объект
+        model.addAttribute("posts", postsDAO.getAll()); // Для выбора должности
+        return "employeeEdit";
+    }
+
+    // Отображение формы редактирования существующего сотрудника
+    @GetMapping("/employee/{id}/edit")
+    public String editEmployeeForm(@PathVariable Long id, Model model) {
+        Employees employee = employeesDAO.getById(id);
+        if (employee == null) {
+            throw new RuntimeException("Сотрудник с ID " + id + " не найден");
+        }
+        model.addAttribute("employee", employee);
+        model.addAttribute("posts", postsDAO.getAll());
+        return "employeeEdit";
+    }
+
+    // Обработка сохранения нового или отредактированного сотрудника
+    @PostMapping("/employee/save")
+    public String saveEmployee(@ModelAttribute Employees employee,
+                               @RequestParam("postId") Long postId) {
+        Posts post = postsDAO.getById(postId);
+        if (post == null) {
+            throw new RuntimeException("Должность с ID " + postId + " не найдена");
+        }
+
+        employee.setPostId(post); // Связали объект
+        employeesDAO.save(employee);
+        return "redirect:/employees";
+    }
 
 
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+<div th:replace="general :: navbar"></div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4" th:text="${employee.id != null} ? 'Редактирование сотрудника' : 'Добавление сотрудника'"></h2>
+
+    <form th:action="@{/employee/save}" th:object="${employee}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="mb-3">
+            <label class="form-label" for="name">ФИО</label>
+            <input type="text" th:field="*{name}" class="form-control" id="name" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="address">Адрес</label>
+            <input type="text" th:field="*{address}" class="form-control" id="address">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="birthDate">Дата рождения</label>
+            <input type="date" th:field="*{birthDate}" class="form-control" id="birthDate" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="education">Образование</label>
+            <input type="text" th:field="*{education}" class="form-control" id="education">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="experience">Стаж (лет)</label>
+            <input type="number" th:field="*{experience}" class="form-control" id="experience" min="0">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="postId">Должность</label>
+            <select th:field="*{postId}" class="form-select" id="postId">
+                <option th:each="post : ${posts}"
+                        th:value="${post.id}"
+                        th:text="${post.postName}">
+                </option>
+            </select>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+    </form>
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>
