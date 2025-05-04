@@ -38,7 +38,7 @@ public class EmployeesDAOImpl
             Query<Employees> query = session.createQuery(hql.toString(), Employees.class);
 
             if (namePart != null && !namePart.trim().isEmpty()) {
-                query.setParameter("namePart", "%" + namePart.trim() + "%");
+                query.setParameter("namePart", namePart.trim().toLowerCase() + "%");
             }
 
             if (post != null) {

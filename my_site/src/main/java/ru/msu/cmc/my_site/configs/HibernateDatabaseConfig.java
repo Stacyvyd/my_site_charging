@@ -1,4 +1,4 @@
-package ru.msu.cmc.my_site;
+package ru.msu.cmc.my_site.configs;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
