@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+
+<div th:replace="general :: navbar"></div>
+
+<div class="container mt-5">
+    <h2 th:text="'Редактирование сотрудника: ' + ${employee.fullName}" class="text-success text-center mb-4"></h2>
+
+    <form method="post" th:action="@{'/employees/' + ${employee.id} + '/edit'}">
+        <div class="mb-3">
+            <label for="fullName" class="form-label">ФИО</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" th:value="${employee.fullName}">
+        </div>
+
+        <div class="mb-3">
+            <label for="position" class="form-label">Должность</label>
+            <input type="text" class="form-control" id="position" name="position" th:value="${employee.position}">
+        </div>
+
+        <div class="mb-3">
+            <label for="experience" class="form-label">Стаж (лет)</label>
+            <input type="number" class="form-control" id="experience" name="experience" th:value="${employee.experience}">
+        </div>
+
+        <button type="submit" class="btn btn-success">Сохранить изменения</button>
+    </form>
+
+    <a th:href="@{'/employees/' + ${employee.id}}" class="btn btn-outline-secondary mt-3">Отменить</a>
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>

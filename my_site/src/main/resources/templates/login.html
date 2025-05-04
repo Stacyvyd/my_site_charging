@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+
+
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="mb-4 text-center text-success">Авторизация</h2>
+
+    <div th:if="${error}" class="alert alert-danger text-center">
+        Неверный логин или пароль
+    </div>
+
+    <form method="post" action="/login">
+        <div class="mb-3">
+            <label for="username" class="form-label">Логин</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-success">Войти</button>
+        </div>
+    </form>
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>

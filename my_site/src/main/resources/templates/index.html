@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+
+<!-- Показываем меню, если пользователь есть -->
+<div th:if="${session.user != null}">
+  <div th:replace="general :: navbar"></div>
+</div>
+
+
+<div class="container mt-5">
+  <h1 th:text="'Здравствуйте, ' + ${session.user != null ? session.user.login : 'гость'}"
+      class="text-success text-center"></h1>
+
+  <!-- Показываем форму входа, если пользователь НЕ вошёл -->
+  <div th:if="${session.user == null}" class="card p-4 shadow mt-4" style="max-width: 400px; margin: 0 auto;">
+    <h4 class="text-center">Требуется авторизация</h4>
+    <p class="text-center text-muted">Пожалуйста, войдите в систему</p>
+    <div class="text-center mt-3">
+      <a href="/login" class="btn btn-success">Войти</a>
+    </div>
+  </div>
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+
+<div th:replace="general :: navbar"></div>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Список служащих</h2>
+
+    <form method="get" class="row g-2 mb-4">
+
+        <!-- Имя -->
+        <div class="col-md-3">
+            <input type="text" name="namePart" class="form-control" placeholder="Имя"
+                   th:value="${namePart}">
+        </div>
+
+        <!-- Должность -->
+        <div class="col-md-3">
+            <select name="postId" class="form-select">
+                <option value="">Все должности</option>
+                <option th:each="p : ${posts}"
+                        th:value="${p.id}"
+                        th:text="${p.postName}"
+                        th:selected="${p.id == postId}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Стаж -->
+        <div class="col-md-2">
+            <input type="number" name="experience" class="form-control" placeholder="Стаж"
+                   th:value="${experience}">
+        </div>
+
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-success">🔍</button>
+        </div>
+    </form>
+
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Должность</th>
+            <th>Стаж</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="emp : ${employees}">
+            <td>
+                <a th:href="@{'/employee/' + ${emp.id}}" th:text="${emp.name}"></a>
+            </td>
+            <td th:text="${emp.postId != null ? emp.postId.postName : 'Больше не работает'}"></td>
+            <td th:text="${emp.experience}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>
