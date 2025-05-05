@@ -1,5 +1,7 @@
 package ru.msu.cmc.my_site.models;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -37,9 +39,11 @@ public class RolesOfEmployee implements CommonEntity<Long> {
     private Roles roleId;
 
     @Column(name = "start_date", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NonNull
     private LocalDate startDate;
 
     @Column(name = "end_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 }

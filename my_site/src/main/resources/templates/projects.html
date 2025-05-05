@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+<div th:replace="general :: navbar"></div>
+
+<div class="container mt-4">
+    <h2>Проекты</h2>
+
+    <!-- 🔎 Форма фильтрации -->
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="namePart" class="form-control" placeholder="Название проекта"
+                   th:value="${namePart}">
+        </div>
+
+        <!-- Статус проекта -->
+        <div class="col-md-4">
+            <select name="status" class="form-select">
+                <option value="">Все статусы</option>
+                <option value="не начался" th:selected="${status == 'не начался'}">Не начался</option>
+                <option value="в процессе" th:selected="${status == 'в процессе'}">В процессе</option>
+                <option value="закончен" th:selected="${status == 'закончен'}">Закончен</option>
+                <option value="закрыт" th:selected="${status == 'закрыт'}">Закрыт</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-outline-success w-100">🔍</button>
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-success w-100" th:href="@{/project/edit}"> Новый проект</a>
+        </div>
+    </form>
+
+    <!-- 📋 Таблица проектов -->
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Дата начала</th>
+            <th>Дата окончания</th>
+            <th>Статус</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="proj : ${projects}">
+            <td>
+                <a th:href="@{'/project/' + ${proj.id}}" th:text="${proj.projectName}"></a>
+            </td>
+            <td th:text="${proj.startDate}"></td>
+            <td th:text="${proj.endDate != null ? proj.endDate : '—'}"></td>
+            <td th:text="${proj.status}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>

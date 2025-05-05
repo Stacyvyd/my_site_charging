@@ -1,5 +1,7 @@
 package ru.msu.cmc.my_site.models;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 
 import java.time.LocalDate;
@@ -23,9 +25,11 @@ public class Projects implements CommonEntity<Long> {
 
     @Column(name = "start_date", nullable = false)
     @NonNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     @Column(name = "end_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     @Column(name = "status", nullable = false)

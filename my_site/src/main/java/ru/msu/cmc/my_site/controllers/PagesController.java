@@ -8,9 +8,12 @@ import ru.msu.cmc.my_site.DAO.EmployeesDAO;
 import ru.msu.cmc.my_site.DAO.EmployeesPostsDAO;
 import ru.msu.cmc.my_site.DAO.PostsDAO;
 import ru.msu.cmc.my_site.DAO.RolesOfEmployeeDAO;
-import ru.msu.cmc.my_site.models.Employees;
-import ru.msu.cmc.my_site.models.Posts;
+import ru.msu.cmc.my_site.DAO.impl.ProjectsDAOImpl;
+import ru.msu.cmc.my_site.DAO.impl.ProjectsRolesDAOImpl;
+import ru.msu.cmc.my_site.DAO.impl.RolesDAOImpl;
+import ru.msu.cmc.my_site.models.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import java.security.Principal;
@@ -22,18 +25,28 @@ public class PagesController {
     private final EmployeesDAO employeesDAO;
     private final EmployeesPostsDAO employeesPostsDAO;
     private final RolesOfEmployeeDAO rolesOfEmployeeDAO;
+    private final ProjectsDAOImpl projectsDAO;
+    private final ProjectsRolesDAOImpl projectsRolesDAO;
+    private final RolesDAOImpl rolesDAO;
 
     @Autowired
     public PagesController(
             EmployeesDAO employeesDAO,
             PostsDAO postsDAO,
             EmployeesPostsDAO employeesPostsDAO,
-            RolesOfEmployeeDAO rolesOfEmployeeDAO
+            RolesOfEmployeeDAO rolesOfEmployeeDAO,
+            ProjectsDAOImpl projectsDAO,
+            ProjectsRolesDAOImpl projectsRolesDAO,
+            RolesDAOImpl rolesDAO
+
     ) {
         this.employeesDAO = employeesDAO;
         this.postsDAO = postsDAO;
         this.employeesPostsDAO = employeesPostsDAO;
         this.rolesOfEmployeeDAO = rolesOfEmployeeDAO;
+        this.projectsDAO = projectsDAO;
+        this.projectsRolesDAO = projectsRolesDAO;
+        this.rolesDAO = rolesDAO;
     }
 
     @GetMapping("/")
@@ -45,9 +58,130 @@ public class PagesController {
 
 
     @GetMapping("/projects")
-    public String projectsPage() {
+    public String projectsPage(@RequestParam(required = false) String namePart,
+                               @RequestParam(required = false) String status,
+                               Model model) {
+        List<Projects> filteredProjects = projectsDAO.filterProjects(namePart, status);
+
+        model.addAttribute("projects", filteredProjects);
+        model.addAttribute("namePart", namePart);
+        model.addAttribute("status", status);
         return "projects";
     }
+
+    @GetMapping("/project/{id}")
+    public String projectPage(@PathVariable("id") Long projectId, Model model) {
+        Projects project = projectsDAO.getById(projectId);
+        if (project == null) {
+            throw new RuntimeException("Проект с ID " + projectId + " не найден");
+        }
+
+        List<ProjectsRoles> rolesList = projectsRolesDAO.filterProjectsRoles(project, null, null);
+
+        model.addAttribute("project", project);
+        model.addAttribute("rolesList", rolesList);
+        return "projectPage"; // Название html-шаблона
+    }
+
+
+
+    @GetMapping("/project/{id}/addParticipant")
+    public String addParticipantForm(@PathVariable("id") Long projectId, Model model) {
+        Projects project = projectsDAO.getById(projectId);
+        if (project == null) throw new RuntimeException("Проект не найден");
+
+        model.addAttribute("project", project);
+        model.addAttribute("participants", employeesDAO.getAll());
+        model.addAttribute("roles", rolesDAO.getAll());
+        model.addAttribute("projectsRoles", new ProjectsRoles());
+        return "projectsRolesEdit";
+    }
+
+
+    @PostMapping("/project/{id}/addParticipant")
+    public String addParticipant(@PathVariable("id") Long projectId,
+                                 @RequestParam Long employeeId,
+                                 @RequestParam Long roleId,
+                                 @RequestParam Integer payment) {
+
+        Projects project = projectsDAO.getById(projectId);
+        Employees employee = employeesDAO.getById(employeeId);
+        Roles role = rolesDAO.getById(roleId);
+
+        // Сохраняем в projects_roles (как раньше)
+        ProjectsRoles entry = new ProjectsRoles(project, role, employee, payment);
+        projectsRolesDAO.save(entry);
+
+        // Также создаём запись в roles_of_employee
+        RolesOfEmployee roleHistory = new RolesOfEmployee(employee, project, role, LocalDate.now());
+
+        rolesOfEmployeeDAO.save(roleHistory);
+
+        return "redirect:/project/" + projectId;
+    }
+
+
+
+
+    // Новый проект (добавление)
+    @GetMapping("/project/edit")
+    public String createProjectForm(Model model) {
+        model.addAttribute("project", new Projects()); // пустой объект
+        return "projectEdit"; // имя HTML-шаблона
+    }
+
+    // Редактирование существующего проекта
+    @GetMapping("/project/{id}/edit")
+    public String editProject(@PathVariable("id") Long id, Model model) {
+        Projects project = projectsDAO.getById(id);
+        if (project == null) {
+            throw new RuntimeException("Проект не найден");
+        }
+        model.addAttribute("project", project);
+        return "projectEdit";
+    }
+
+    @PostMapping("/project/{id}/deleteParticipant")
+    public String deleteParticipant(@PathVariable("id") Long projectId,
+                                    @RequestParam Long participantId) {
+
+        ProjectsRoles pr = projectsRolesDAO.getById(participantId);
+        projectsRolesDAO.delete(pr);
+
+        // Найти соответствующую активную запись в roles_of_employee
+        List<RolesOfEmployee> matchingRoles = rolesOfEmployeeDAO.filterRolesHistory(pr.getEmployeeId(), pr.getProjectId(), pr.getRoleId());
+        for (RolesOfEmployee role : matchingRoles) {
+            if (role.getEndDate() == null) {
+                role.setEndDate(LocalDate.now());
+                rolesOfEmployeeDAO.update(role);
+            }
+        }
+
+        return "redirect:/project/" + projectId;
+    }
+
+
+
+
+    @GetMapping("/projects/new")
+    public String newProject(Model model) {
+        model.addAttribute("project", new Projects());
+        return "projectEdit";
+    }
+
+    @PostMapping("/projects/save")
+    public String saveProject(@ModelAttribute Projects project) {
+        if (project.getId() != null) {
+            projectsDAO.update(project);
+        } else {
+            projectsDAO.save(project);
+        }
+        return "redirect:/projects";
+    }
+
+
+
+
 
     @GetMapping("/payment-policies")
     public String paymentPoliciesPage() {

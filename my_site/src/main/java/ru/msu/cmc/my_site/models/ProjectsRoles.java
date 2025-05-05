@@ -37,4 +37,5 @@ public class ProjectsRoles implements CommonEntity<Long> {
     @Column(name = "payment", nullable = false)
     @NonNull
     private Integer payment;
+
 }

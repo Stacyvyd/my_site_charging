@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+<div th:replace="general :: navbar"></div>
+<div class="container mt-4">
+
+    <h2 class="mb-3">Добавить участника в проект: <span th:text="${project.projectName}"></span></h2>
+
+    <form th:action="@{/project/{id}/addParticipant(id=${project.id})}" method="post">
+
+    <input type="hidden" name="projectId" th:value="${project.id}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Сотрудник</label>
+            <select name="employeeId" class="form-select" required>
+                <option th:each="emp : ${participants}" th:value="${emp.id}" th:text="${emp.name}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Роль</label>
+            <select name="roleId" class="form-select" required>
+                <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Доплата</label>
+            <input type="number" name="payment" class="form-control" required>
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-success">Сохранить</button>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
