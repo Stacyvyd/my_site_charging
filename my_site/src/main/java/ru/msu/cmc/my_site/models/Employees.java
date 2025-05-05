@@ -1,5 +1,7 @@
 package ru.msu.cmc.my_site.models;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 
 import java.time.LocalDate;
@@ -32,11 +34,12 @@ public class Employees implements CommonEntity<Long> {
     @ToString.Exclude
     private Posts postId;
 
-    @Column(name = "experience")
+    @Column(name = "experience", nullable = false)
+    @NonNull
     private Integer experience;
 
-    @Column(name = "birth_date", nullable = false)
-    @NonNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @Column(name = "education")

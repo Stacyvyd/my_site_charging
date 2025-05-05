@@ -22,7 +22,7 @@
 
         <div class="mb-3">
             <label class="form-label" for="birthDate">Дата рождения</label>
-            <input type="date" th:field="*{birthDate}" class="form-control" id="birthDate" required>
+            <input type="date" th:field="*{birthDate}" class="form-control" id="birthDate">
         </div>
 
         <div class="mb-3">
@@ -32,17 +32,15 @@
 
         <div class="mb-3">
             <label class="form-label" for="experience">Стаж (лет)</label>
-            <input type="number" th:field="*{experience}" class="form-control" id="experience" min="0">
+            <input type="number" th:field="*{experience}" class="form-control" id="experience" min="0" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label" for="postId">Должность</label>
-            <select th:field="*{postId}" class="form-select" id="postId">
-                <option th:each="post : ${posts}"
-                        th:value="${post.id}"
-                        th:text="${post.postName}">
-                </option>
+            <select th:field="*{postId.id}" class="form-select" id="postId">
+                <option th:each="post : ${posts}" th:value="${post.id}" th:text="${post.postName}"></option>
             </select>
+
         </div>
 
         <div class="d-flex justify-content-end">

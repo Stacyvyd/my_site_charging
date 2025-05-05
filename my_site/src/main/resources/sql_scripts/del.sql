@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS projects_roles;
+DROP TABLE IF EXISTS roles_of_employee;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS authorization_table;
+DROP TABLE IF EXISTS awards;
+DROP TABLE IF EXISTS experience_payment;
+DROP TABLE IF EXISTS payment_history;
+DROP TABLE IF EXISTS Employees_posts;
+DROP TABLE IF EXISTS Employees;
+DROP TABLE IF EXISTS posts;

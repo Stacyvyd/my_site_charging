@@ -19,6 +19,56 @@
   </ul>
 </div>
 
+<div class="d-flex justify-content-end mt-4">
+  <a th:href="@{'/employee/' + ${employee.id} + '/edit'}" class="btn btn-primary me-2">Редактировать</a>
+
+  <form th:action="@{'/employee/' + ${employee.id} + '/delete'}" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить этого сотрудника?');">
+    <button type="submit" class="btn btn-danger">Удалить</button>
+  </form>
+</div>
+
+
+<h5 class="mt-4">История должностей</h5>
+<table class="table table-bordered table-sm">
+  <thead>
+  <tr>
+    <th>Должность</th>
+    <th>Дата начала</th>
+    <th>Дата окончания</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="rec : ${positionsHistory}">
+    <td th:text="${rec.postId.postName}">Должность</td>
+    <td th:text="${rec.startDate}">01.01.2020</td>
+    <td th:text="${rec.endDate != null ? rec.endDate : 'н/д'}">31.12.2020</td>
+  </tr>
+  </tbody>
+</table>
+
+
+<h4 class="mt-4">Проекты, в которых участвовал сотрудник</h4>
+<table class="table table-bordered">
+  <thead>
+  <tr>
+    <th>Проект</th>
+    <th>Роль</th>
+    <th>Дата начала</th>
+    <th>Дата окончания</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="record : ${rolesInProjects}">
+    <td th:text="${record.projectId.projectName}"></td>
+    <td th:text="${record.roleId.roleName}"></td>
+    <td th:text="${record.startDate}"></td>
+    <td th:text="${record.endDate != null ? record.endDate : '—'}"></td>
+  </tr>
+  </tbody>
+</table>
+
+
+
 <div th:replace="general :: site-script"></div>
 </body>
 </html>

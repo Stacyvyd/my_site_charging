@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.msu.cmc.my_site.DAO.EmployeesDAO;
+import ru.msu.cmc.my_site.DAO.EmployeesPostsDAO;
 import ru.msu.cmc.my_site.DAO.PostsDAO;
+import ru.msu.cmc.my_site.DAO.RolesOfEmployeeDAO;
 import ru.msu.cmc.my_site.models.Employees;
 import ru.msu.cmc.my_site.models.Posts;
 
@@ -16,12 +18,23 @@ import java.security.Principal;
 @Controller
 public class PagesController {
 
-    @Autowired
-    private PostsDAO postsDAO;
+    private final PostsDAO postsDAO;
+    private final EmployeesDAO employeesDAO;
+    private final EmployeesPostsDAO employeesPostsDAO;
+    private final RolesOfEmployeeDAO rolesOfEmployeeDAO;
 
-
     @Autowired
-    private EmployeesDAO employeesDAO;
+    public PagesController(
+            EmployeesDAO employeesDAO,
+            PostsDAO postsDAO,
+            EmployeesPostsDAO employeesPostsDAO,
+            RolesOfEmployeeDAO rolesOfEmployeeDAO
+    ) {
+        this.employeesDAO = employeesDAO;
+        this.postsDAO = postsDAO;
+        this.employeesPostsDAO = employeesPostsDAO;
+        this.rolesOfEmployeeDAO = rolesOfEmployeeDAO;
+    }
 
     @GetMapping("/")
     public String indexPage(Model model, Principal principal) {
@@ -51,11 +64,8 @@ public class PagesController {
 
 
 
-    @Autowired
-    public PagesController(EmployeesDAO employeesDAO, PostsDAO postsDAO) {
-        this.employeesDAO = employeesDAO;
-        this.postsDAO = postsDAO;
-    }
+
+
 
     @GetMapping("/employees")
     public String getEmployees(@RequestParam(required = false) String namePart,
@@ -90,6 +100,8 @@ public class PagesController {
             throw new RuntimeException("Сотрудник с ID " + id + " не найден");
         }
         model.addAttribute("employee", employee);
+        model.addAttribute("positionsHistory", employeesPostsDAO.filterPosts(employee, null));
+        model.addAttribute("rolesInProjects", rolesOfEmployeeDAO.filterRolesHistory(employee, null, null));
         return "employeePage"; // это будет имя HTML-файла
     }
 
@@ -115,17 +127,34 @@ public class PagesController {
 
     // Обработка сохранения нового или отредактированного сотрудника
     @PostMapping("/employee/save")
-    public String saveEmployee(@ModelAttribute Employees employee,
-                               @RequestParam("postId") Long postId) {
-        Posts post = postsDAO.getById(postId);
-        if (post == null) {
-            throw new RuntimeException("Должность с ID " + postId + " не найдена");
+    public String saveEmployee(@ModelAttribute Employees employee) {
+        Long postId = employee.getPostId() != null ? employee.getPostId().getId() : null;
+
+        if (postId == null) {
+            throw new RuntimeException("Должность не выбрана");
         }
 
-        employee.setPostId(post); // Связали объект
-        employeesDAO.save(employee);
+        Posts post = postsDAO.getById(postId);
+        employee.setPostId(post);
+        if (employee.getId() != null) {
+            employeesDAO.update(employee);
+        } else {
+            employeesDAO.save(employee);
+        }
+        //System.out.println("Обновление сотрудника");
         return "redirect:/employees";
     }
+
+
+    @PostMapping("/employee/{id}/delete")
+    public String deleteEmployee(@PathVariable("id") Long id) {
+        Employees employee = employeesDAO.getById(id);
+        if (employee != null) {
+            employeesDAO.delete(employee);
+        }
+        return "redirect:/employees";
+    }
+
 
 
 }

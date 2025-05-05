@@ -24,7 +24,7 @@ CREATE TABLE Employees (
                            Address VARCHAR(255),
                            post_id INT,
                            experience INT,
-                           birth_date DATE NOT NULL,
+                           birth_date DATE,
                            education VARCHAR(255),
                            FOREIGN KEY (post_id) REFERENCES posts(post_id)
 );
