@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+<div th:replace="general :: navbar"></div>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Политики выплат</h2>
+
+    <div class="row">
+        <!-- Блок по должности -->
+        <div class="col-md-3 mb-3">
+            <a href="/payment/position" class="btn btn-lg btn-outline-primary w-100 p-5">
+                <h4>По должности</h4>
+            </a>
+        </div>
+        <!-- Блок по стажу -->
+        <div class="col-md-3 mb-3">
+            <a href="/experience-payments" class="btn btn-lg btn-outline-success w-100 p-5">
+                <h4>По стажу</h4>
+            </a>
+        </div>
+        <!-- Блок по премиям -->
+        <div class="col-md-3 mb-3">
+            <a href="/awards" class="btn btn-lg btn-outline-warning w-100 p-5">
+                <h4>Премии</h4>
+            </a>
+        </div>
+        <!-- Блок по проектам и ролям -->
+        <div class="col-md-3 mb-3">
+            <a href="/projects" class="btn btn-lg btn-outline-danger w-100 p-5">
+                <h4>По проектам и ролям</h4>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>

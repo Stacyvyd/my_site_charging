@@ -1,5 +1,7 @@
 package ru.msu.cmc.my_site.models;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 
 import java.time.LocalDate;
@@ -34,6 +36,7 @@ public class PaymentHistory implements CommonEntity<Long> {
     private String paymentType;
 
     @Column(name = "payment_date", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NonNull
     private LocalDate paymentDate;
 

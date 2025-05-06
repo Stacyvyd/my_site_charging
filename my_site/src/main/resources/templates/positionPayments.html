@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+<div th:replace="general :: navbar"></div>
+
+<div class="container mt-4">
+  <h2>Выплаты по должностям</h2>
+
+  <table class="table table-bordered mt-3">
+    <thead>
+    <tr>
+      <th>Должность</th>
+      <th>Зарплата</th>
+      <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${posts}">
+      <td th:text="${post.postName}"></td>
+      <td th:text="${post.payment} + ' ₽'"></td>
+      <td>
+        <a class="btn btn-sm btn-outline-primary"
+           th:href="@{/payment/position/edit/{id}(id=${post.id})}">✏️ Редактировать</a>
+
+        <form th:action="@{/payment/position/delete/{id}(id=${post.id})}"
+              method="post" style="display:inline;"
+              onsubmit="return confirm('Удалить должность?');">
+          <button type="submit" class="btn btn-sm btn-outline-danger">🗑️ Удалить</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <a class="btn btn-outline-success mt-3" th:href="@{/payment/position/add}">
+    ➕ Добавить должность
+  </a>
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>

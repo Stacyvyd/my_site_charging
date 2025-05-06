@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="general :: page-head"></head>
+<body>
+<div th:replace="general :: navbar"></div>
+
+<div class="container mt-4">
+    <h2>Выплаты по стажу</h2>
+
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Стаж (лет)</th>
+            <th>Надбавка</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${payments}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.payment}"></td>
+            <td>
+                <a th:href="@{/experience-payments/edit/{experience}(experience=${p.id})}" class="btn btn-sm btn-primary">Редактировать</a>
+                <form th:action="@{/experience-payments/delete}" method="post" style="display:inline">
+                    <input type="hidden" name="experience" th:value="${p.id}">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Удалить?')">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="general :: site-script"></div>
+</body>
+</html>

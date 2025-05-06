@@ -19,17 +19,15 @@ public class PaymentHistoryDAOImpl extends CommonDAOImpl<PaymentHistory, Long>
     }
 
     @Override
-    public List<PaymentHistory> filterPayments(
-            Employees employeeId,
-            LocalDate startDate,
-            LocalDate endDate,
-            String paymentType
-    ) {
+    public List<PaymentHistory> filterPayments(Employees employeeId,
+                                               LocalDate startDate, LocalDate endDate,
+                                               String paymentType) {
         try (Session session = sessionFactory.openSession()) {
             StringBuilder hql = new StringBuilder("FROM PaymentHistory WHERE 1 = 1");
 
+            // Проверка на null и добавление фильтров в запрос
             if (employeeId != null) {
-                hql.append(" AND employeeId = :employee");
+                hql.append(" AND employeeId = :employeeId");
             }
             if (startDate != null) {
                 hql.append(" AND paymentDate >= :startDate");
@@ -37,14 +35,16 @@ public class PaymentHistoryDAOImpl extends CommonDAOImpl<PaymentHistory, Long>
             if (endDate != null) {
                 hql.append(" AND paymentDate <= :endDate");
             }
-            if (paymentType != null) {
+            // Проверка, что paymentType не пустое значение
+            if (paymentType != null && !paymentType.trim().isEmpty()) {
                 hql.append(" AND paymentType = :paymentType");
             }
 
             Query<PaymentHistory> query = session.createQuery(hql.toString(), PaymentHistory.class);
 
+            // Установка параметров в запрос
             if (employeeId != null) {
-                query.setParameter("employee", employeeId);
+                query.setParameter("employeeId", employeeId);
             }
             if (startDate != null) {
                 query.setParameter("startDate", startDate);
@@ -52,7 +52,8 @@ public class PaymentHistoryDAOImpl extends CommonDAOImpl<PaymentHistory, Long>
             if (endDate != null) {
                 query.setParameter("endDate", endDate);
             }
-            if (paymentType != null) {
+            // Устанавливаем параметр paymentType, если оно не пустое
+            if (paymentType != null && !paymentType.trim().isEmpty()) {
                 query.setParameter("paymentType", paymentType);
             }
 
