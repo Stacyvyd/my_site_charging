@@ -616,18 +616,18 @@ public class SiteTest {
     public void testEditPaymentPoliciesAndProjectRoles() throws InterruptedException {
         driver.get("http://localhost:8080");
 
-// 1. Редактирование выплаты по стажу
+        // 1. Редактирование выплаты по стажу
         driver.findElement(By.linkText("Политики выплат")).click();
         Thread.sleep(500);
         driver.findElement(By.linkText("По стажу")).click();
         Thread.sleep(500);
 
-// Получим значение стажа, которое редактируем
+        // Получим значение стажа, которое редактируем
         WebElement editLink = driver.findElement(By.linkText("Редактировать"));
         WebElement experienceCell = editLink.findElement(By.xpath("./ancestor::tr/td[1]"));
         int experience = Integer.parseInt(experienceCell.getText());
 
-// Редактирование выплаты
+        // Редактирование выплаты
         editLink.click();
         WebElement paymentInput = driver.findElement(By.id("payment"));
         int oldValue = Integer.parseInt(paymentInput.getAttribute("value"));
@@ -635,12 +635,12 @@ public class SiteTest {
         paymentInput.clear();
         paymentInput.sendKeys(String.valueOf(newValue));
 
-// Сохранение
+        // Сохранение
         WebElement saveBtn = driver.findElement(By.cssSelector("button[type='submit']"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", saveBtn);
         Thread.sleep(1000);
 
-// Проверка — возвращаемся и ищем нужную строку
+        // Проверка — возвращаемся и ищем нужную строку
         driver.get("http://localhost:8080/experience-payments");
         Thread.sleep(1000);
         List<WebElement> rows = driver.findElements(By.cssSelector("table tbody tr"));
@@ -675,7 +675,7 @@ public class SiteTest {
         driver.findElement(By.linkText("По должности")).click();
         Thread.sleep(500);
 
-// Находим строку и сохраняем название должности
+        // Находим строку и сохраняем название должности
         WebElement editAnchor = driver.findElement(By.xpath("//a[contains(text(),'Редактировать')]"));
         WebElement tableRow = editAnchor.findElement(By.xpath("./ancestor::tr"));
         String targetPostTitle = tableRow.findElement(By.cssSelector("td:nth-child(1)")).getText();
@@ -693,7 +693,7 @@ public class SiteTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", confirmBtn);
         Thread.sleep(1000);
 
-// Снова ищем нужную строку по названию должности
+        // Снова ищем нужную строку по названию должности
         List<WebElement> allRows = driver.findElements(By.cssSelector("table tbody tr"));
         WebElement matchedRow = allRows.stream()
                 .filter(r -> r.findElement(By.cssSelector("td:nth-child(1)")).getText().equals(targetPostTitle))
@@ -739,14 +739,14 @@ public class SiteTest {
         }
         Thread.sleep(500);
 
-// Подтвердить alert, если он появился
+        // Подтвердить alert, если он появился
         try {
             driver.switchTo().alert().accept();
         } catch (Exception ignored) {}
 
         Thread.sleep(1000);
 
-// Проверка: участник с оплатой 1234 должен исчезнуть
+        // Проверка: участник с оплатой 1234 должен исчезнуть
         WebElement refreshedRolesTable = driver.findElement(By.cssSelector("table.table-bordered tbody"));
         boolean participantStillExists = refreshedRolesTable.getText().contains("1234");
         assertTrue(!participantStillExists, "Участник с оплатой 1234 должен быть удалён из проекта");
